@@ -4,8 +4,8 @@
 
 ## 当前研究配置
 
-- 研究区：新疆
-- 已确认资产：`projects/underground-water-488604/assets/xj`
+- 研究区：用户提供的资产范围
+- 示例资产：`projects/underground-water-488604/assets/xj`
 - 常用研究时段：2002-01 至 2025-12
 - 月度动态变量：每月一个 GeoTIFF
 - 年度或静态变量：保持产品原始时间尺度导出
