@@ -1,0 +1,6 @@
+interface:
+  display_name: "GEE Data Downloader"
+  short_description: "Select datasets and generate cited GEE export code"
+  default_prompt: "Use $gee-data-downloader to select a suitable geospatial product and produce verified GEE export code, product metadata, URLs, and citations."
+policy:
+  allow_implicit_invocation: true
