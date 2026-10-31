@@ -1,27 +1,27 @@
 # GEE Data Downloader
 
-一个面向 Codex 和 Claude Code 的 Agent Skill，用于选择适合研究时段的地理空间产品，识别 Google Earth Engine 资产路径，并生成可复现的 GEE JavaScript 下载代码、产品信息、官方网址和引用文献。
+An Agent Skill for Codex and Claude Code that selects geospatial products for a requested study period, recognizes Google Earth Engine asset paths, and generates reproducible GEE JavaScript export code with product metadata, official URLs, and literature citations.
 
-## 功能
+## Features
 
-- 根据研究区、时间范围、时间尺度、变量和分辨率选择数据产品。
-- 核验 GEE 数据集 ID、实际时间覆盖、波段、比例因子、单位和原生分辨率。
-- 从 GEE Assets 截图识别 Cloud Assets 或 Legacy Assets 路径。
-- 生成月度、年度或静态 GeoTIFF 导出代码。
-- 按变量物理意义处理月累计、月平均、分类数据和质量控制。
-- 输出产品官网、数据 DOI、方法论文和规范引用。
-- 支持 MODIS、CHIRPS、ERA5-Land、GLEAM、CLCD、OpenLandMap、HWSD 等产品的选择流程。
+- Selects products from the study area, date range, temporal scale, variable, and spatial resolution.
+- Verifies GEE dataset IDs, actual temporal coverage, bands, scale factors, units, and native resolution.
+- Recognizes Cloud Assets and Legacy Assets paths from GEE Assets screenshots.
+- Generates monthly, annual, and static GeoTIFF export code.
+- Applies physically appropriate monthly sums, monthly means, categorical handling, and quality control.
+- Provides product pages, data DOIs, method papers, and formatted citations.
+- Supports selection workflows for MODIS, CHIRPS, ERA5-Land, GLEAM, CLCD, OpenLandMap, HWSD, and related products.
 
-## 兼容性
+## Compatibility
 
-| 运行环境 | 个人安装位置 | 直接调用 |
+| Runtime | Personal installation path | Direct invocation |
 |---|---|---|
 | Codex | `~/.codex/skills/gee-data-downloader/` | `$gee-data-downloader` |
 | Claude Code | `~/.claude/skills/gee-data-downloader/` | `/gee-data-downloader` |
 
-Skill 使用双方共同支持的 `SKILL.md` Agent Skills 结构。`agents/openai.yaml` 提供 Codex 界面元数据；Claude Code 加载 `SKILL.md` 和 `references/` 中的内容。
+The shared `SKILL.md` and `references/` files follow the Agent Skills structure supported by both runtimes. `agents/openai.yaml` supplies Codex interface metadata, while Claude Code loads the core skill and references directly.
 
-## 安装
+## Installation
 
 ### Codex
 
@@ -29,56 +29,54 @@ Skill 使用双方共同支持的 `SKILL.md` Agent Skills 结构。`agents/opena
 git clone https://github.com/limyuzhang1022-bit/gee-data-downloader.git "$HOME/.codex/skills/gee-data-downloader"
 ```
 
-安装后可直接提出“调用 GEE”“使用 GEE”或“下载某数据集”等请求，也可以显式调用：
+Invoke the skill explicitly or use a matching request:
 
 ```text
-$gee-data-downloader 下载新疆地区 2002-01 至 2025-12 的 CHIRPS 月降水数据，每月一个 TIFF。
+$gee-data-downloader Download monthly CHIRPS precipitation for the selected study area from 2002-01 through 2025-12, with one TIFF per month.
 ```
 
 ### Claude Code
 
-个人级安装：
+Personal installation:
 
 ```bash
 git clone https://github.com/limyuzhang1022-bit/gee-data-downloader.git "$HOME/.claude/skills/gee-data-downloader"
 ```
 
-项目级安装：
+Project installation:
 
 ```bash
 git clone https://github.com/limyuzhang1022-bit/gee-data-downloader.git ".claude/skills/gee-data-downloader"
 ```
 
-显式调用示例：
+Direct invocation example:
 
 ```text
-/gee-data-downloader 下载新疆地区 2002-01 至 2025-12 的 ERA5-Land 月径流数据，并换算为 mm/month。
+/gee-data-downloader Download monthly ERA5-Land runoff for the selected study area from 2002-01 through 2025-12 and convert it to mm/month.
 ```
 
-Claude Code 也可以根据 Skill 的 `description` 自动加载。安装位置和调用规则见 [Claude Code Skills 官方文档](https://code.claude.com/docs/zh-CN/skills)。
+Claude Code can also load the skill automatically from its `description`. See the [official Claude Code Skills documentation](https://code.claude.com/docs/en/skills) for installation and invocation behavior.
 
-## 默认研究配置
-
-当前参考配置面向新疆研究区：
+## Example Study-Area Asset
 
 ```text
 projects/underground-water-488604/assets/xj
 ```
 
-其他用户应在生成代码时提供自己的研究区资产路径，或上传资产截图供 Skill 识别。
+Provide the intended study-area asset path when requesting code, or attach a GEE Assets screenshot for path recognition.
 
-## 输出内容
+## Output
 
-每次调用按以下结构输出：
+Each request produces:
 
-1. 产品选择结论与完整时间覆盖判断。
-2. 研究区资产 ID 和资产类型。
-3. 可粘贴到 GEE Code Editor 的完整 JavaScript。
-4. 数据集 ID、机构、变量、单位、比例因子、分辨率、聚合方式和质量控制。
-5. 产品官网、数据 DOI 和方法论文。
-6. 导出任务数量、Google Drive 目录、文件命名和占位符说明。
+1. A product-selection decision and temporal-coverage assessment.
+2. The study-area asset ID and asset type.
+3. Complete JavaScript for the GEE Code Editor.
+4. Dataset ID, provider, variable, units, scale factor, resolution, aggregation, and quality-control information.
+5. Official product URLs, data DOIs, and method papers.
+6. Export task count, Google Drive folder, file naming, and required placeholders.
 
-## 仓库结构
+## Repository Structure
 
 ```text
 gee-data-downloader/
@@ -91,6 +89,6 @@ gee-data-downloader/
     `-- gee-code-patterns.md
 ```
 
-## 数据与引用原则
+## Data and Citation Policy
 
-Skill 优先核验 [Google Earth Engine Data Catalog](https://developers.google.com/earth-engine/datasets)、产品机构官网、数据 DOI 和原始论文。产品结束日期会按实际可用影像确认，输出分辨率会同时说明原生分辨率和导出网格尺度。
+The skill prioritizes the [Google Earth Engine Data Catalog](https://developers.google.com/earth-engine/datasets), product-provider websites, data DOIs, and original method papers. It verifies the actual last available observation and reports both native resolution and export-grid scale.
